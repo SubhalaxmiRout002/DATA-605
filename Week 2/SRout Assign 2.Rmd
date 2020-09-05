@@ -1,0 +1,341 @@
+---
+title: "SRout Assign 2"
+author: "Subhalaxmi Rout"
+date: "9/5/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Problem set 1
+
+$(1)$ Show that $A^T A ≠ A A^T$ in general. (Proof and demonstration.)
+
+**Answer** <br>
+Method 1: <br>
+Lets prove mathematically, <br>
+
+$$\mathbf{A} = \left[\begin{array}
+{rrr}
+a & b \\
+c & d 
+\end{array}\right]
+$$
+Transpose of A
+$$\mathbf{A^T} = \left[\begin{array}
+{rrr}
+a & c \\
+b & d 
+\end{array}\right]
+$$
+$$\mathbf{A A^T} = \left[\begin{array}
+{rrr}
+a & b \\
+c & d 
+\end{array}\right]
+\
+\left[\begin{array}
+{rrr}
+a & c \\
+b & d 
+\end{array}\right]
+$$
+$$\mathbf{A A^T}= \left[\begin{array}
+{rrr}
+(a^2 + b^2) & (ac + bd) \\
+(ac + bd) & (c^2 + d^2) 
+\end{array}\right]
+$$
+
+
+Lets find out $A^T A$
+
+$$\mathbf{A^T A} =\left[\begin{array}
+{rrr}
+a & c \\
+b & d 
+\end{array}\right]
+\
+\left[\begin{array}
+{rrr}
+a & b \\
+c & d 
+\end{array}\right]
+$$
+$$\mathbf{A^T A} =\left[\begin{array}
+{rrr}
+(a^2 + c^2) & (ab + cd) \\
+(ab + cd) & (b^2 + d^2) 
+\end{array}\right]
+$$
+From the above equation we can see $A^T A ≠ A A^T$
+
+For example: 
+$$\mathbf{M} = \left[\begin{array}
+{rrr}
+3 & 4 \\
+5 & 6 
+\end{array}\right]
+$$
+Transpose of M
+$$\mathbf{M^T} = \left[\begin{array}
+{rrr}
+3 & 5 \\
+4 & 6 
+\end{array}\right]
+$$
+
+$$M M^T =\left[\begin{array}
+{rrr}
+3 & 4 \\
+5 & 6 \\
+\end{array}\right]
+\
+\left[\begin{array}
+{rrr}
+3 & 5 \\
+4 & 6 \\
+\end{array}\right]
+$$
+
+
+$$M M^T  =  \left[\begin{array}
+{rrr}
+(3^2 + 4^2) & (3*5 + 4*6) \\
+(3*5 + 4*6) & (5^2 + 6^2) 
+\end{array}\right]
+$$
+
+
+
+
+$$M M^T  =  \left[\begin{array}
+{rrr}
+(9 + 16) & (15 + 24) \\
+(15 + 24) & (25 + 36) 
+\end{array}\right]
+$$
+
+
+$$M M^T  =  \left[\begin{array}
+{rrr}
+25 & 39 \\
+39 & 61 
+\end{array}\right]
+$$
+
+Similary product of $M^T M$
+$$M^T M = \left[\begin{array}
+{rrr}
+3 & 5 \\
+4 & 6 \\
+\end{array}\right]
+\
+\left[\begin{array}
+{rrr}
+3 & 4 \\
+5 & 6 \\
+\end{array}\right]
+$$
+
+$$M^T M  =  \left[\begin{array}
+{rrr}
+(3^2 + 5^2) & (3*4 + 5*6) \\
+(3*4 + 5*6) & (4^2 + 6^2) 
+\end{array}\right]
+$$
+
+
+$$M^T M  =  \left[\begin{array}
+{rrr}
+(9 + 25) & (12 + 30) \\
+(12 + 30) & (16 + 36) 
+\end{array}\right]
+$$
+
+$$M^T M  =  \left[\begin{array}
+{rrr}
+(9 + 25) & (12 + 30) \\
+(12 + 30) & (16 + 36) 
+\end{array}\right]
+$$
+
+
+$$M^T M  =  \left[\begin{array}
+{rrr}
+34 & 42 \\
+42 & 52 
+\end{array}\right]
+$$
+
+Above example we see $A^T A ≠ A A^T$.
+
+Method 2:  Using R<br>
+```{r}
+A = matrix(c(3,5,4,6), nrow = 2, ncol = 2)
+TA = t(A)
+TA
+```
+$A A^T$
+```{r}
+AAT <- A %*% TA
+AAT
+```
+$A^T A$
+```{r}
+ATA <- TA %*% A
+ATA
+```
+Hence, from above example we see $A^T A ≠ A A^T$.
+
+$(2)$ For a special type of square matrix A, we get $A^T A = A A^T$ . Under what conditions
+could this be true? (Hint: The Identity matrix I is an example of such a matrix).
+
+**Answer** <br>
+Method 1 :<br>
+Suppose $A = A^T$ <br>
+For example:<br>
+$$A  =  \left[\begin{array}
+{rrr}
+1 & 3 \\
+3 & 1 
+\end{array}\right]
+$$
+Transpose of A :<br>
+$$A^T  =  \left[\begin{array}
+{rrr}
+1 & 3 \\
+3 & 1 
+\end{array}\right]
+$$
+$$A A^T = \left[\begin{array}
+{rrr}
+1 & 3 \\
+3 & 1 \\
+\end{array}\right]
+\
+\left[\begin{array}
+{rrr}
+1 & 3 \\
+3 & 1 \\
+\end{array}\right]
+$$
+$$A A^T  = \left[\begin{array}
+{rrr}
+(1*1 + 3*3) & (1*3 + 3*1) \\
+(3*1 + 1*3) & (3*3 + 1*1) \\
+\end{array}\right]
+$$
+$$A A^T  = \left[\begin{array}
+{rrr}
+10 & 6 \\
+6 & 10 \\
+\end{array}\right]
+$$
+Similary $A^T A$
+
+$$A^T A = \left[\begin{array}
+{rrr}
+1 & 3 \\
+3 & 1 \\
+\end{array}\right]
+\
+\left[\begin{array}
+{rrr}
+1 & 3 \\
+3 & 1 \\
+\end{array}\right]
+$$
+
+
+$$A^T A  = \left[\begin{array}
+{rrr}
+(1*1 + 3*3) & (1*3 + 3*1) \\
+(3*1 + 1*3) & (3*3 + 1*1) \\
+\end{array}\right]
+$$
+
+$$A^T A  = \left[\begin{array}
+{rrr}
+10 & 6 \\
+6 & 10 \\
+\end{array}\right]
+$$
+
+So, we can confirm that when $A = A^T$ then $A A^T = A^T A$.<br>
+
+Method 2: <br>
+Lets varify the same using R.<br>
+
+```{r}
+A <-  matrix(c(1,3,3,1), ncol=2, nrow = 2) 
+T_A = t(A)
+T_A
+```
+$A A^T$
+```{r}
+AT_A <- A %*% T_A
+AT_A
+```
+$A^T A$
+```{r}
+T_AA <- T_A %*% A
+T_AA
+```
+$A A^T$ and $A^T A$ gives the same result. <br>
+
+**Problem set 2** <br>
+Matrix factorization is a very important problem. There are supercomputers built just
+to do matrix factorizations. Every second you are on an airplane, matrices are being
+factorized. Radars that track 
+ights use a technique called Kalman filtering. At the heart
+of Kalman Filtering is a Matrix Factorization operation. Kalman Filters are solving linear
+systems of equations when they track your 
+ight using radars.<br>
+Write an R function to factorize a square matrix A into LU or LDU, whichever you
+prefer. Please submit your response in an R Markdown document using our class naming
+convention, E.g. LFulton_Assignment2_PS2.png<br>
+You don't have to worry about permuting rows of A and you can assume that A is less
+than 5x5, if you need to hard-code any variables in your code. If you doing the entire
+assignment in R, then please submit only one markdown document for both the problems.
+
+```{r}
+factorize <- function(A) {
+  
+  U <- A
+  n <- nrow(A)
+  L <- diag(n)
+  
+  # If 1x1 matrix, then U = A and L=[1]
+  if (n == 1) 
+    {
+    return(list(L,U))
+    }
+  
+  
+  # Determine multiplier for each position and add it to L
+  for(k in 1:(n-1)) 
+  {
+    for (i in (k+1):n) { 
+      L[i,k] <- U[i,k]/U[k,k]
+      U[i,] <- U[i,] - L[i,k] * U[k,]
+    }
+  }
+  return(list(L,U))
+}
+
+# Test with 3x3 matrix
+Mat <- matrix(c(1,5,8,-7,6,2,9,3,4), nrow=3, byrow=TRUE)
+LU <- factorize(Mat)
+cat("Lower trangualr matrix :", "\n")
+LU[[1]]
+cat("Upper trangular matrix", "\n")
+LU[[2]]
+
+# To verify the answer 
+Mat == LU[[1]] %*% LU[[2]]
+```
