@@ -1,0 +1,117 @@
+---
+title: "SRout_Assignment_5"
+author: "Subhalaxmi Rout"
+date: "9/27/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+Choose independently two numbers B and C at random from the interval [0, 1] with uniform density. Prove that B and C are proper probability distributions.
+Note that the point $(B,C)$ is then chosen at random in the unit square.
+
+
+
+
+Solution:
+
+Create two random variables i.e B and C, by sampling 10,000 numbers between 0 and 1.
+
+```{r}
+library(ggplot2)
+set.seed(123)
+n <- 10000
+B <- runif(n, min = 0, max = 1)
+C <- runif(n, min = 0, max = 1)
+hist(B)
+hist(C)
+```
+Histogram of B and C shows uniform density diribution between 0 and 1.<br>
+
+
+**Find the probability that $(a)$ B + C < 1/2**
+
+Solution:<br>
+```{r}
+sum_BC <- B + C
+pr_B_plus_C <- sum(sum_BC < 0.5) / n
+pr_B_plus_C
+
+# density plot of B + C
+ggplot(as.data.frame(sum_BC), aes(sum_BC)) + 
+  geom_density(colour="red") +
+  labs(title = "Density Plot of B + C", x = "Sum of Random Values") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+**Find the probability that $(b)$ BC < 1/2**
+
+Solution:<br>
+
+```{r}
+mul_BC <- B * C
+pr_B_mul_C <- sum(mul_BC < 0.5) / n
+pr_B_mul_C
+
+# density plot of B and C
+ggplot(as.data.frame(mul_BC), aes(mul_BC)) + 
+  geom_density(colour="red") +
+  labs(title = "Density Plot of B and C", x = "Product of Random Values") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+**Find the probability that $(c)$ |B − C| < 1/2 **
+
+Solution:<br>
+
+```{r}
+abs_BC <- abs(B - C)
+pr_B_abs_C <- sum(abs_BC < 0.5) /n
+pr_B_abs_C
+
+# density plot of abs(B and C)
+ggplot(as.data.frame(abs_BC), aes(abs_BC)) + 
+  geom_density(colour="red") +
+  labs(title = "Density Plot of |B - C|", x = "Difference of Random Values") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+**Find the probability that: $(d)$ max{B,C} < 1/2**
+
+Solution:<br>
+
+```{r}
+max_BC <- pmax(B,C)
+pr_B_max_C <- sum(max_BC < 0.5) /n
+pr_B_max_C
+
+# density plot of max(B and C)
+ggplot(as.data.frame(max_BC), aes(max_BC)) + 
+  geom_density(colour="red") +
+  labs(title = "Density Plot of Max(B and C)", x = "Maximum of Random Values") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+**Find the probability that: $(e)$ min{B,C} < 1/2**
+
+Solution:<br>
+
+```{r}
+min_BC <- pmin(B,C)
+pr_B_min_C <- sum(min_BC < 0.5) /n
+pr_B_min_C
+
+# density plot of min(B and C)
+ggplot(as.data.frame(min_BC), aes(min_BC)) + 
+  geom_density(colour="red") +
+  labs(title = "Density Plot of Min(B and C)", x = "Minimum of Random Values") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
