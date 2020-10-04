@@ -1,0 +1,299 @@
+---
+title: "SRout Assign 6"
+author: "Subhalaxmi Rout"
+date: "10/4/2020"
+output:
+  pdf_document:
+    toc: no
+  bookdown::pdf_document2:
+    latex_engine: xelatex
+    toc: no
+  html_document:
+    df_print: paged
+    toc: no
+geometry: margin=1.5cm
+pagestyle: empty
+papersize: a3
+fontsize: 12pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+
+$(1)$ **A box contains 54 red marbles, 9 white marbles, and 75 blue marbles. If a marble is randomly selected from the box,
+what is the probability that it is red or blue? Express your answer as a fraction or a decimal number rounded to four
+decimal places.** <br>
+
+**Answer** <br>
+Given Red marbels = 54 <br>
+White marbels = 9 <br>
+Blue marbels = 75 <br>
+Total marbels = 54 + 9 + 75 = 138 <br>
+P(Red | Blue) = (54 + 75) / 138 = 129/138 = 0.9348 <br>
+
+```{r}
+round((54 + 75) / 138, 4)
+```
+
+$(2)$ **You are going to play mini golf. A ball machine that contains 19 green golf balls, 20 red golf balls, 24 blue golf balls, and 17 yellow golf balls, randomly gives you your ball. What is the probability that you end up with a red golf ball? Express
+your answer as a simplified fraction or a decimal rounded to four decimal places.** <br>
+
+**Answer** <br>
+Given Green golf ball = 19 <br>
+Red golf ball = 20 <br>
+Blue golf ball = 24 <br>
+Yellow golf ball = 17 <br>
+Total ball = 19 + 20 + 24 + 17 = 80 <br>
+P(Red golf ball) = Red golf ball / Total ball = 20/80 = 0.25 <br>
+
+```{r}
+round(20 / 80, 4)
+```
+
+$(3)$ **A pizza delivery company classifies its customers by gender and location of residence. The research department has
+gathered data from a random sample of 1399 customers. The data is summarized in the table below.**
+
+![](/Users/subhalaxmirout/DATA 605/HW 6 question 3.png)
+
+What is the probability that a customer is not male or does not live with parents? Write your answer as a fraction or a
+decimal number rounded to four decimal places.
+
+**Answer** <br>
+
+From the above table, Total male = 671 <br>
+Total female = 728 <br>
+Total residence = Total male + Total female = 671 + 728 = 1399 <br>
+
+P(Not male or does not live with parents) = (Total residence) - (male live with parents) / Total residence <br>
+P(Not male or does not live with parents) = (1399 - 215) / 1399 <br>
+P(Not male or does not live with parents) = 0.8463 <br>
+
+```{r}
+round((1399 - 215) / 1399, 4)
+```
+
+$(4)$ **Determine if the following events are independent.<br>
+Going to the gym. Losing weight. <br>
+Answer: A) Dependent B) Independent** <br>
+
+**Answer** <br>
+
+Going to the gym is independent.(Person can go to the gym or not) <br>
+Losing weight is dependent on gym.(Going to gym means workout, so weight loss) <br>
+So, two events are dependent. <br>
+Answer is **A) Dependent** <br>
+
+$(5)$ **A veggie wrap at City Subs is composed of 3 different vegetables and 3 different condiments wrapped up in a tortilla. If
+there are 8 vegetables, 7 condiments, and 3 types of tortilla available, how many different veggie wraps can be made?**
+
+**Answer** <br>
+
+This problem can solve using combination
+vegetables = 8
+condiments = 7
+tortilla = 3
+
+$$C(n,r) = \frac{n!}{r!(n-r)!}$$
+$$C(totalwrap) = C(8,3) * C(7,3) * C(3,1) = \frac{8!}{3!(8-3)!} * \frac{7!}{3!(7-3)!} * \frac{3!}{1!(3-1)!} $$
+$$C(totalwrap) = 5880$$
+
+```{r}
+choose(8,3) * choose(7, 3) * choose(3, 1)
+```
+
+$(6)$ **Determine if the following events are independent. <br>
+Jeff runs out of gas on the way to work. Liz watches the evening news.<br>
+Answer: A) Dependent B) Independent ** <br>
+
+**Answer** <br>
+
+Answer is B) Independent <br>
+
+These two events have no where realted to each other. <br>
+
+$(7)$ **The newly elected president needs to decide the remaining 8 spots available in the cabinet he/she is appointing. If there
+are 14 eligible candidates for these positions (where rank matters), how many different ways can the members of the
+cabinet be appointed?** <br>
+
+**Answer** <br>
+
+Spots availabe = 8 <br>
+Candidates  = 14 <br>
+$$No. of ways = P(n,r) = \frac{n!}{(n-r)!}$$ <br>
+$$No. of ways = P(14,8) = \frac{14!}{(14-8)!} $$ <br>
+No. of ways = 121080960 <br>
+
+```{r}
+factorial(14) / factorial(6)
+```
+
+$(8)$ **A bag contains 9 red, 4 orange, and 9 green jellybeans. What is the probability of reaching into the bag and randomly
+withdrawing 4 jellybeans such that the number of red ones is 0, the number of orange ones is 1, and the number of green
+ones is 3? Write your answer as a fraction or a decimal number rounded to four decimal places.**
+
+**Answer** <br>
+
+Given, Red jellybeans = 9 <br>
+Orange jellybeans = 4 <br>
+Green jellybeans = 9 <br>
+Total = 9 + 4 + 9 = 22 <br>
+P(Orange = 1, Green = 3) = Random_combo / Total_combo <br>
+$$Random Combo = C(9,0) * C(4,1) * C(9,3) = \frac{9!}{0!(9-0)!} * \frac{4!}{1!(4-1)!} * \frac{9!}{3!(9-3)!} = 336$$
+$$Total Combo = C(22,4) = \frac{22!}{4!(22-4)!} = 7315$$
+P(Orange = 1, Green = 3) = Random_combo / Total_combo = 336 / 7315 = 0.0459 <br>
+```{r}
+random_combo <- choose(4,1) * choose(9,3)
+random_combo
+total_combo <- choose(22,4)
+total_combo
+round(random_combo / total_combo, 4)
+```
+$(9)$ **Evaluate the following expression** <br>
+$$\frac{11!}{7!}$$
+**Answer** <br>
+
+$$\frac{11!}{7!}$$
+$$\frac{11 * 10 * 9 * 8 * 7!}{7!}$$
+$$11 * 10 * 9 * 8 = 7920$$
+```{r}
+factorial(11) / factorial(7)
+```
+
+$(10)$ **Describe the complement of the given event.<br>
+67% of subscribers to a fitness magazine are over the age of 34.**
+
+**Answer** <br>
+Complement of the event : 33% of subscribers to a fitness magazine are less than or equal to age of 34. <br>
+
+$(11)$ **If you throw exactly three heads in four tosses of a coin you win $97. If not, you pay me $30.
+Step 1. Find the expected value of the proposition. Round your answer to two decimal places.**
+
+**Answer** <br>
+Expected value of the proposition is: (P exactly 3 heads + P not 3 heads)
+
+```{r}
+total_combo <- 2 ^ 4
+P_3heads <- choose(4,3) / total_combo
+P_not3heads <- 1 - choose(4,3) / total_combo
+expect_value <- round((P_3heads * 97) + P_not3heads * (-30), 2)
+expect_value
+```
+**Step 2. If you played this game 559 times how much would you expect to win or lose? (Losses must be entered as
+negative.)**
+
+**Answer** <br>
+The expect to win $978.25. <br>
+
+```{r}
+round(expect_value * 559,2)
+```
+
+$(12)$ **Flip a coin 9 times. If you get 4 tails or less, I will pay you $23. Otherwise you pay me $26.<br>
+Step 1. Find the expected value of the proposition. Round your answer to two decimal places**
+
+**Answer** <br>
+Expected value of the proposition is: (P of 4 tails or less + P more than 4 tails)
+
+```{r}
+combo <- 2 ^ 9
+P_4tails_less <- sum(choose(9,4),choose(9,3),choose(9,2),choose(9,1),choose(9,0)) / combo
+P_4tails_more <- 1 - P_4tails_less
+expect_value <- round((P_4tails_less * 23) + P_4tails_more * (-26), 2)
+expect_value
+```
+
+**Step 2. If you played this game 994 times how much would you expect to win or lose? (Losses must be entered as
+negative.)**
+
+**Answer** <br>
+The expect to lose -$1491. <br>
+
+```{r}
+round(expect_value * 994, 2)
+```
+
+$(13)$ **The sensitivity and specificity of the polygraph has been a subject of study and debate for years. A 2001 study of the
+use of polygraph for screening purposes suggested that the probability of detecting a liar was .59 (sensitivity) and that
+the probability of detecting a "truth teller" was .90 (specificity). We estimate that about 20% of individuals selected for
+the screening polygraph will lie.** <br>
+
+**a. What is the probability that an individual is actually a liar given that the polygraph detected him/her as such? (Show
+me the table or the formulaic solution or both.)**
+
+**Answer** <br>
+According to Bayes Theorem <br>
+
+![](/Users/subhalaxmirout/DATA 605/Bayes.png)
+
+P(A) = Probability of Liar <br>
+P(X) = Probability of lie detected by Polygraph <br>  
+
+
+$$P(Liar|Polygraph Detected Liar) = \frac{P(Polygraph Detected Liar|Liar) * P(Liar)}{P(Polygraph Detected Liar)*P(Liar) +P(Polygraph Detected Liar | Truth) * P(Truth)}$$
+
+
+P(Polygraph Detected Liar) = 0.59 <br>
+P(Polygraph Detected Truth) = 0.90 <br>
+P(Polygraph Detected Lie) = 1 - 0.9 = 0.1 <br>
+P(Liar) = 0.2 <br>
+P(Truth) = 1 - 0.2 = 0.8 <br>
+$$P(Liar|Polygraph Detected Liar) = \frac{(0.59 * 0.2)} {(0.59 * 0.2) + (0.1 * 0.8)}$$ 
+$$P(Liar|Polygraph Detected Liar) = 0.5959596$$
+So, around 60% chance that the person was a liar if polygraph test detect him/her was a liar. <br>
+
+```{r}
+(0.59 * 0.2) / (0.59 * 0.2 + 0.1 * 0.8)
+```
+
+
+**b. What is the probability that an individual is actually a truth-teller given that the polygraph detected him/her as
+such? (Show me the table or the formulaic solution or both.)** <br>
+
+**Answer** <br>
+P(A) = Truth teller <br>
+P(B) = Polygraph detect truth teller <br>  
+
+
+$$P(Truth teller|Polygraph Detected truth teller) = \frac{P(Polygraph Detected truth teller| Truth teller) * P(Truth)}{P(Polygraph Detected truth teller)*P(Truth teller) +P(Polygraph Detected truth teller | Liar) * P(Liar)}$$
+
+
+P(Polygraph Detected Liar) = 0.59 <br>
+P(Polygraph Detected Truth) = 0.90 <br>
+P(Polygraph Detected Lie) = 1 - 0.9 = 0.1 <br>
+P(Polygraph Detected truth | Liar) = 1 - 0.59 = 0.41 <br>
+P(Liar) = 0.2 <br>
+P(Truth) = 1 - 0.2 = 0.8 <br>
+
+$$P(Truth teller|Polygraph Detected truth teller) = \frac{(0.9 * 0.8)} {(0.9 * 0.8) + (0.41 * 0.2)}$$ 
+$$P(Truth teller|Polygraph Detected truth teller) = 0.8977556$$
+```{r}
+0.9 * 0.8 / (0.9 * 0.8 + 0.41 * 0.2)
+```
+About 90% chance that the person was a telling truth if polygraph test detect him/her was a truth teller. <br>
+
+
+**c. What is the probability that a randomly selected individual is either a liar or was identified as a liar by the
+polygraph? Be sure to write the probability statement.** <br>
+
+**Answer** <br>
+
+$$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
+P(A) = Polygraph Detected liar <br>
+P(B) = Indivisual is actually Liar <br>
+P(A and B) = Individual lier and polygraph detected liar <br>
+$$P(A \cup B) = (0.59 * 0.2 + 0.1 * 0.8) + 0.2 - (0.59 * 0.2)$$ 
+$$P(A \cup B) = 0.198 + 0.2 - 0.118$$
+$$P(A \cup B) = 0.198 + 0.2 - 0.118$$
+$$P(A \cup B) = 0.28$$
+
+```{r}
+(0.59 * 0.2 + 0.1 * 0.8) + 0.2 - (0.59 * 0.2)
+```
+
+About 28% randomly selected individual is either a liar or was identified as a liar by the polygraph.
