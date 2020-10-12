@@ -1,0 +1,148 @@
+---
+title: "SRout Assign 7"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+**
+1. Let X1, X2, . . . , Xn be n mutually independent random variables, each of
+which is uniformly distributed on the integers from 1 to k. Let Y denote the
+minimum of the Xi’s. Find the distribution of Y.
+**
+
+**Answer** <br>
+
+```{r}
+library(ggplot2)
+n <- 1000
+k <- 20
+Y <- c()
+for (i in 1:n){
+  Xn <- sample(1:k, 5, TRUE)
+  Y <- c(Y, min(Xn))
+}
+ggplot(data.frame(table(Y)), aes(Y, Freq)) + 
+  geom_bar(stat = "identity", fill = "skyblue2", width = 1) +
+  ylab("Count") + 
+  ggtitle("Distribution of Y") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+```
+
+**2. Your organization owns a copier (future lawyers, etc.) or MRI (future doctors). This machine has a manufacturer’s expected lifetime of 10 years. This means that we expect one failure every ten years. (Include the probability statements and R Code for each part.).** <br>
+
+**a. What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as a geometric. (Hint: the probability is equivalent to not failing during the first 8 years..)** <br>
+
+**Answer** <br>
+
+$$P(\text{failure after 8 years}) = 1 - \sum_{k=1}^{9} \frac{1}{10}\times\Big(\frac{9}{10}\Big)^{k-1}$$
+
+```{r}
+# by using regular
+prob_succ <- 1/10
+prob_fail <- 1 - prob_succ
+n <- 8
+
+expected_value_geom <- 1 / prob_succ
+cat("Expected value:", expected_value_geom,'\n')
+
+variance_geom <- (1 - prob_succ) / (prob_succ ^ 2)
+sd_geom <- sqrt(variance_geom)
+cat("Standard deviation:", sd_geom, '\n')
+
+#By hand P(X<=8) = P(X=0)+P(X=1)+....+P(X=7)+P(X=8)
+i <- 1
+Y <- c()
+while (i <= 9 )
+  {
+  pg <-  (prob_succ) * (prob_fail ^ (i-1))
+  Y <- c(Y, pg)
+  i <- i + 1
+}
+cat("The probability that the machine will fail after 8 years is :", 1 - sum(Y), '\n')
+
+# by using geometric distibution function, x > 8
+pgeom(8, prob_succ, lower.tail = FALSE)
+```
+
+**b. What is the probability that the machine will fail after 8 years? Provide also the expected value and standard deviation. Model as an exponential** <br>
+
+**Answer** <br>
+$$p(x >= k) = e^\frac{-k}{\lambda}$$
+$$P(\text{failure after 8 years}) = e^\frac{-8}{10} = e^{-0.8}$$
+
+```{r}
+# by hand
+prob_succ <- 1/10
+expected_value_expo <- 1 / prob_succ
+cat("Expected value:", expected_value_expo, '\n')
+
+lamda <- 1 / expected_value_expo
+variance_expo <- 1 / (lamda ^ 2)
+sd_expo <- sqrt(variance_expo)
+cat("Standard deviation:", sd_expo, '\n')
+
+# P (x<=8) = e ^ (- lambda* x)
+prob_expo <-  exp(- lamda * 8 )
+cat("Probability that the machine will fail after 8 years:",  prob_expo, '\n')
+
+# by using exponential distibution function, x > 8
+pexp(8, 0.1, lower.tail = FALSE)
+```
+
+**c. What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as a binomial. (Hint: 0 success in 8 years)** <br>
+
+**Answer** <br>
+
+```{r}
+# by hand
+prob_succ <- 1/10
+prob_fail <- 1 - prob_succ
+
+expected_value_binom <- 8 * prob_succ
+cat("Expected value:", expected_value_binom, '\n')
+
+sd_binom <- sqrt(8 * prob_succ*(1 - prob_succ))
+cat("Standard deviation:", sd_binom, '\n')
+
+# P(x) = C(n,k) * (p ^ k) (1 - p ^ (n-k)) 
+prob_binom <-  choose(8,0) * (prob_succ ^ 0) * (prob_fail ^ (8 - 0))
+cat("Probability that the machine will fail after 8 years:",  prob_binom, '\n')
+
+# by using binomial distibution function, x > 8
+pbinom(0,8, 0.1, lower.tail = TRUE)
+```
+
+**d. What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as a Poisson.** <br>
+
+**Answer** <br>
+$$P(x) = \frac{\lambda^xe^{-\lambda}}{x!}$$
+
+```{r}
+# by hand
+prob_succ <- 1/10
+prob_fail <- 1 - prob_succ
+
+expected_value_poiss <- 8 * prob_succ
+cat("Expected value:", expected_value_poiss, '\n')
+
+lamda <- expected_value_poiss
+variance_poiss <- lamda
+
+sd_poiss <- sqrt(variance_poiss)
+cat("Standard deviation:", sd_poiss, '\n')
+
+# P(x) = lambda ^ x * e ^ (- lambda) / n!
+prob_poiss <-  ((lamda ^ 0) * exp(-lamda) ) / factorial(0)
+cat("Probability that the machine will fail after 8 years:",  prob_poiss, '\n')
+
+# by using Poisson function, x > 8
+ppois(0, expected_value_poiss)
+```
