@@ -1,0 +1,85 @@
+---
+title: "SRout Assign 8"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+**$(11)$ A company buys 100 lightbulbs, each of which has an exponential lifetime of
+1000 hours. What is the expected time for the first of these bulbs to burn
+out? (See Exercise 10.)**
+
+**Answer** <br>
+$$E(X) = \mu/n = 1000/100 = 10 hours$$ <br>
+
+**$Z(14)$ Assume that X1 and X2 are independent random variables, each having an
+exponential density with parameter $\lambda$. Show that Z = X1 - X2 has density** <br>
+$$fz(z) = (1/2)\lambda e ^ {-\lambda|z|}$$ <br>
+
+**Answer** <br>
+The convolution formula of W = X + Y, we know the probability density would be:
+$$fw(W) = \int_{-\infty}^{\infty}fx(x)f{y}(w-x)dx$$
+
+X1 and X2 are independent random variables.<br>
+Z = X1 - X2 or X1 + (-X2) <br>
+X2 = Z - X1 <br>
+(To keep it simple, X1 = X, X2 = -Y) <br>
+
+$$fz(z) = \int_{-\infty}^{\infty}fx(x)f(-y)(z - x)dx$$
+$$fz(z) = \int_{-\infty}^{\infty}fx(x)f(y)(x - z)dx$$
+For Z < 0
+$$fz(z) = \int_{0}^{\infty}\lambda e ^ {-\lambda x} \lambda e ^ {-\lambda(x - z)}dx$$
+$$fz(z) = \lambda e ^ {-\lambda z} \int_{0}^{\infty} \lambda e ^ {-2\lambda x} dx = (\lambda/2) e ^ {\lambda z}$$
+Similarly, for z >= 0, we will have to take the negative the exponent
+$$fz(z) = (\lambda / 2) e ^ {-\lambda z}$$
+Hence, combing both limit Z<0 and Z >= 0 we can write: <br>
+$$fz = (\frac{1}{2}) \lambda e ^ {-\lambda |z|}$$
+
+Reference: https://www.youtube.com/watch?v=f8Nli1AfygM
+
+**$(1)$ Let X be a continuous random variable with mean $\mu$ = 10 and variance
+$\sigma ^ 2$ = 100/3. Using Chebyshev's Inequality, Find an upper bound for the
+following probabilities.** <br>
+**Answer** <br>
+$$P(|X - \mu| >= k\sigma ) =< \frac {\sigma ^ 2}{k^2 \sigma ^ 2} = \frac {1}{k^2}$$
+
+**(a) P(|X - 10| >= 2)** <br>
+
+```{r}
+mu <- 10
+variance <- 100/3
+sigma <- sqrt(variance)
+# k * sigma = 2
+k <- 2 / sigma
+1 / k ^ 2
+```
+Probability cannot be greater than 1 so, upper bound is 1. <br>
+**(b) P(|X - 10| >= 5)** <br>
+
+```{r}
+k <- 5 / sigma
+1 / k ^ 2
+```
+Probability cannot be greater than 1 so, upper bound is 1. <br>
+**(c) P(|X - 10| >= 9)** <br>
+
+```{r}
+k <- 9 / sigma
+1 / k ^ 2
+```
+Upper bound is : 0.4115226 <br>
+**(d) P(|X - 10| >= 20)** <br>
+
+```{r}
+k <- 20 / sigma
+1 / k ^ 2
+```
+Upper bound is: 0.08333333 <br>
