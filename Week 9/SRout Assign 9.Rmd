@@ -1,0 +1,90 @@
+---
+title: "SRout Assign 9"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**1. The price of one share of stock in the Pilsdorff Beer Company (see Exercise
+8.2.12) is given by Yn on the nth day of the year. Finn observes that
+the differences Xn = Yn+1 - Yn appear to be independent random variables
+with a common distribution having mean $\mu$ = 0 and variance $\sigma ^ 2$ = 1/4. If
+Y1 = 100, estimate the probability that Y365 is** <br>
+(a) >= 100 <br>
+(b) >= 110 <br>
+(c) >= 120 <br>
+
+**Solution** <br>
+
+$(a)$ >= 100 <br>
+
+```{r}
+n <- 365
+mu <- 0
+y <- 100
+mu_y <- mu + y
+var <- 1/4 * (n)
+sd <- sqrt(var)
+x1 <- 100
+
+pnorm(x1, mu_y, sd, lower.tail = F)
+```
+
+$(b)$ >= 110
+
+```{r}
+x2 <- 110
+pnorm(x2, mu_y, sd, lower.tail = F)
+
+```
+
+$(c)$ >= 120
+
+```{r}
+x3 <- 120
+pnorm(x3, mu_y, sd, lower.tail = F)
+
+```
+
+**2.  Calculate the expected value and variance of the binomial distribution using the moment generating function.** <br>
+
+**Solution** <br>
+The binomial function:
+$b(x, n, p) = \frac{n!}{x!(n-x)!}p^xq^{n-x}$ ,where $q = 1-p$.
+Moment generating function: <br>
+$$Mx(t) = \sum_{x=0}^{n} e^{xt} \frac{n!}{x!(n-x)!}p^xq^{n-x} = \sum_{x=0}^{n} (pe^t)^x \frac{n!}{x!(n-x)!}q^{n-x} = (q+pe^t)^n$$
+Take derivative with respect to t
+$$\frac{dM(t)}{dt} = pe^t n(q+pe^t)^{n-1}$$
+Expected value E(X) at t= 0: <br>
+$$\frac{dM(t)}{dt} = pe^0 n(q+pe^0)^{n-1} = pn(q + p) ^ {n-1} = pn(1-p+p) ^ {n-1} = np$$
+$$E(x^2) = np(q + p)^{n−2}(q + np) = np(q + np)$$
+The variance is V(X)=E(X2)−E(X)2:
+$$V(X) = E(x^2) - (E(x))^2 = np(q + np) - (np)^2 = np(q+np) - n^2p^2 = npq$$
+Above equation found, E(X) = np and V(X) = npq.
+
+
+**3.  Calculate the expected value and variance of the exponential distribution using the moment generating function. **<br>
+
+**Solution** <br>
+Exponential distribution:
+
+$$f(x)  = \lambda e ^ {-\lambda x}$$
+Moment generating function: <br>
+$$Mx(t) = \int_{-\infty}^\infty e^{tx}fx(x)dx = \int_0^\infty e^{tx}\lambda e^{-\lambda x}dx = \lambda \int_0^\infty e^{(t - \lambda)x}dx = \frac{\lambda}{t- \lambda}$$
+Expected value E(X), substitute t = 0: <br>
+$$E(x) = \frac{\lambda}{(t- \lambda)^2} = \frac{1}{\lambda}$$
+
+The variance is V(X)=E(X2)−E(X)2, substitute t = 0: <br>
+$$E(x^2) = \frac{2\lambda}{(t- \lambda)^3} = \frac{2}{\lambda^2}$$
+$$E(X) ^ 2 = \frac {2\lambda} {(\lambda - 0) ^ 3} - \frac {1} {\lambda ^ 2}$$
+
+$$V(X) = \frac {2\lambda} {\lambda ^ 3} -  \frac {1} {\lambda ^ 2} $$
+
+$$V(X) = \frac {2} {\lambda ^ 2} -  \frac {1} {\lambda ^ 2} $$
+$$V(X)  = \frac {1} {\lambda ^ 2}$$
+
+Above equation found, E(X) = $\frac {1} {\lambda}$ and V(X) = $\frac {1} {\lambda ^ 2}$.
