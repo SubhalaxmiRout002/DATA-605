@@ -1,0 +1,66 @@
+---
+title: "SRout Assign 10"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Smith is in jail and has 1 dollar; he can get out on bail if he has 8 dollars.
+A guard agrees to make a series of bets with him. If Smith bets A dollars,
+he wins A dollars with probability .4 and loses A dollars with probability .6. <br>
+
+Find the probability that he wins 8 dollars before losing all of his money if <br>
+
+(a) he bets 1 dollar each time (timid strategy). <br>
+(b) he bets, each time, as much as possible but not more than necessary to
+bring his fortune up to 8 dollars (bold strategy). <br>
+(c) Which strategy gives Smith the better chance of getting out of jail? <br>
+
+**Answer** <br>
+
+(a) he bets 1 dollar each time (timid strategy) <br>
+
+$$ P = \frac {1 - (\frac {q}{p}) ^ s } {1 - (\frac {q}{p}) ^ M} $$
+
+Given, q = 0.6 <br>
+p = 0.4, <br>
+s = 1, <br>
+M = 8 <br>
+
+According to formula of Gambler’s Ruin: <br>
+$$ P = \frac {1 - (\frac {q}{p}) ^ s } {1 - (\frac {q}{p}) ^ M} = \frac {1 - (\frac {0.6}{0.4}) ^ 1 } {1 - (\frac {0.6}{0.4}) ^ 8} = 0.02$$
+
+```{r}
+# using R
+q <- 0.6
+p <- 0.4
+s <- 1
+M <- 8
+P <- (1 -  (q/p) ^ s) / (1 - (q/p) ^ M)
+print(P)
+```
+The probability of wining is 0.02. <br>
+
+(b) he bets, each time, as much as possible but not more than necessary to
+bring his fortune up to 8 dollars (bold strategy). <br>
+
+If he bets his entire money each time until 8 dollar. He starts with 1 dollar and must win 3 bets in a row with probability of 0.4 <br>
+
+At first bet, If he wins, he ends up with $2. <br>
+
+At second bet, If he wins, he ends up with $4. <br>
+
+At third bet, If he wins, he ends up with $8. <br>
+
+```{r}
+library(stats)
+dbinom(3,3,0.4)
+```
+
+The probability of wining is 0.064. <br>
+
+(c) The bold strategy is having higher probability than timid strategy, So, bold strategy has a better chance of getting out of jail. 
