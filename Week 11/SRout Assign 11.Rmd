@@ -1,0 +1,155 @@
+---
+title: "SRout Assign 11"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+###  Instruction 
+
+Using the “cars” dataset in R, build a linear model for stopping distance as a function of speed and replicate the analysis of your textbook chapter 3 (visualization, quality evaluation of the model, and residual analysis.) <br>
+
+Steps to follow:
+
+1. Visualize the Data
+2. The Linear Model Function
+3. Evaluating the Quality of the Model
+4. Residual Analysis
+
+The data give the speed of cars and the distances taken to stop. Note that the data were recorded in the 1920s. Dataset is predefined in R. First load the dataset and see the available observations and attributes. Dataset consisits of 50*2 i.e 50 rows and  2 columns, they are `speed` and `dist`. <br>
+
+[,1]	speed	numeric	Speed (mph) <br>
+[,2]	dist	numeric	Stopping distance (ft) <br>
+
+(`?cars`, gives description of the dataset) <br>
+```{r}
+dim(cars)
+```
+Below shows first 6 rows of data.
+
+```{r}
+head(cars)
+```
+
+Below shows the summary of data.
+
+```{r}
+summary(cars)
+```
+
+check if there is any missing value avalable in the dataset: <br>
+```{r}
+# list rows of data that have missing values
+cars[!complete.cases(cars),]
+```
+No missing values in the dataset. 
+
+### Visualize the Data
+
+For numeric paired data, scatter plot is the best way to show the relationship. The relationship between two variables/columns is called their correlation . If the line goes from a high-value on the y-axis down to a high-value on the x-axis, the variables have a negative correlation . A perfect positive correlation is given the value of 1. <br>
+
+Let's plot a scatter plot using speed and dist. <br>
+
+```{r}
+library(ggplot2)
+ggplot(aes(x = speed, y = dist), data = cars) +
+  geom_point(color = 'blue') +
+  ggtitle('Speed vs stopping distance') +
+  xlab('speed (mph)') +
+  ylab('stopping distance (ft)') +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+From the initial view, there looks to be a positive linear relationship between the speed of the car and the stopping disctance.  This implies if speed will go up then stopping distance also high.<br>
+
+```{r}
+cor(cars$speed, cars$dist)
+```
+Positive correlation : 0.81 <br>
+
+### The Linear Model function <br>
+
+Defining a linear model between the speed and stopping distance using lm function. Then we will evaluate the model.
+
+Linear regression is a way to model the relationship between two variables. The equation has the form $Y= c + mX$, where
+where $Y$ is the dependent variable, $X$ is the independent variable , $m$ is the slope of the line and $c$ is the y-intercept. <br>
+```{r}
+lm = lm(dist ~ speed, data = cars)
+```
+
+```{r}
+intercept <- coef(lm)[1]
+intercept
+slope <- coef(lm)[2]
+slope
+```
+Above model shows, the y−intercept is −17.5791 and the slope is 3.9324 . The equation can be written as below.<br>
+$$ Stopping Distance = -17.58  + 3.93 * speed$$
+Above plot shows plots the original data along with the fitted line. 
+```{r}
+ggplot(cars, aes(x = speed, y = dist)) +
+geom_point() +
+geom_smooth(method='lm', formula= y ~ x ) +
+  ggtitle('Speed vs stopping distance') +
+  xlab('speed (mph)') +
+  ylab('stopping distance (ft)') +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+### Evaluating the Quality of the Model <br>
+
+The regression model does not tell us anything about the model’s quality. The function summary() extracts some additional information that we can use to determine how well the data fit the resulting model.
+
+```{r}
+# summary of a linear model
+summary(lm)
+```
+Let’s examine each of the items presented in this summary. <br>
+
+Residuals: The residuals are the differences between the actual measured values and the corresponding values on the fitted regression line. If the line is a good fit with the data, we would expect residual values that are normally distributed around a mean of zero. This we will see in the residual analysis. <br>
+
+Std. Error: The Std. Error column shows the statistical standard error for each of the coefficients. For a good model, we typically would like to see a standard error that is at least five to ten times smaller than the corresponding coefficient.
+The standard error on this variable is about 9.5 times smaller than the estimate which is good. <br>
+
+Residual standard error: The Residual standard error is a measure of the total variation in the residual values. <br>
+
+Degrees of freedom : The number of degrees of freedom is the total number of measurements or observations used to generate the model, minus the number of coefficients in the model. <br>
+50 - 2 = 48 (degrees of freedom) <br>
+
+Multiple R-squared: It is a statistical measure of how well the model describes the measured data.In general, values of $R^2$ that are closer to 1 indicate a better-fitting model.However, a good model does not necessarily require a large $R^2$ value. It may still accurately predict future observations, even with a small $R^2$ value. 
+This model explains about 65% of the variation. <br>
+
+Adjusted R-squared: The adjusted $R^2$ is always smaller than the $R^2$ value. The higher value better for the model. <br>
+
+F-statistic: the low p-value better for the model. The P-value of this coefficient is very small indicating that it is statistically significant. <br>
+
+### Residual Analysis
+
+In this section we will see, distribution of residuals, Q-Q plot. 
+
+```{r}
+residuals <- residuals(lm)
+hist(residuals, col = "steelblue")
+```
+
+Above histogram shows residuals are normaly distributed  but right skewed.
+
+```{r}
+qqnorm(resid(lm))
+qqline(resid(lm))
+```
+
+If the residuals were normally distributed, we would expect the points plotted in this figure to follow a straight line. However, the two ends diverge significantly from that line. This behavior indicates that the residuals are not normally distributed. <br>
+This test further confirms that using only the speed as a predictor in the model is insufficient to explain the data. <br>
+
+#### Future work <br>
+The model needs to improve, may be multiple input factors helps to improve model and can explain the data better. 
+
