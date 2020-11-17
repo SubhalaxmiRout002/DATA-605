@@ -1,0 +1,250 @@
+---
+title: "SRout Assign 12"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+### Data Desciption
+
+The attached who.csv dataset contains real-world data from 2008. The variables included follow.
+
+* Country: name of the country
+* LifeExp: average life expectancy for the country in years
+* InfantSurvival: proportion of those surviving to one year or more
+* Under5Survival: proportion of those surviving to five years or more
+* TBFree: proportion of the population without TB.
+* PropMD: proportion of the population who are MDs
+* PropRN: proportion of the population who are RNs
+* PersExp: mean personal expenditures on healthcare in US dollars at average exchange rate
+* GovtExp: mean government expenditures per capita on healthcare, US dollars at average exchange rate
+* TotExp: sum of personal and government expenditures.
+
+#### Question 1
+
+Provide a scatterplot of LifeExp~TotExp, and run simple linear regression. Do not transform the variables. Provide and interpret the F statistics, $R^2$, standard error,and p-values only. Discuss whether the assumptions of simple linear regression met.
+
+**Solution** <br>
+
+Load the csv data in to R, this data consists of 10 coumns and 190 obsevarions.  
+
+```{r}
+who <- read.csv("/Users/subhalaxmirout/DATA 605/who.csv")
+dim(who)
+```
+Below table shows entire data and statistical measures.
+
+```{r}
+library(DT)
+DT::datatable(who)
+summary(who)
+```
+
+Checking for any NA in data. 
+
+```{r}
+who[!complete.cases(who),]
+```
+
+No NA present in data set. 
+
+```{r}
+library(ggplot2)
+library(scales)
+
+ggplot(who, aes(TotExp, LifeExp)) +
+  geom_point(col ="blue") +
+  ylab("Avg Life Expectancy (years)") +
+  xlab("Total Expenditures (Personal and Government)")  +
+  theme( axis.line = element_line(colour = "darkblue", 
+                      size = 1, linetype = "solid")) +
+  scale_x_continuous(labels = dollar)
+```
+
+Above plot shows:
+
+* The relationship between Life Expectancy and Total Healthcare Expenditures is not linear. 
+* The high expenditures counties having high life expectancy. 
+
+##### Create linear regression model using Expenditure and Life expectancy.
+
+```{r}
+lm = lm(LifeExp ~ TotExp,data = who)
+summary(lm)
+```
+
+From Linear model we get:
+
+* Low R-squared this means model only accounts for 25.8% of the variation in the data.
+* Low p-value which is < 0.05, this means statistically significant
+* Residuals showing data is not distributed linearly. 
+* Standard error is 9.37
+
+We can say, this model is not a good fit model.
+
+#### Residual analysis
+
+```{r}
+residual <- resid(lm)
+plot(who$TotExp, residual, xlab="Total Expenditures (Personal and Government)",
+     ylab="Residuals",
+     main="Residual Plot" ) 
+abline(h = 0, col = "blue", lwd=2, lty=2)
+abline(h = 10, col = "dark red", lwd=2, lty=2)
+abline(h = -10, col = "dark red", lwd=2, lty=2)
+```
+
+```{r}
+hist(residual, col = "sky blue")
+```
+
+```{r}
+qqnorm(residual)
+qqline(residual)
+```
+
+From residual analysis, we found:
+
+* Residuals are not normally distributed and there is no constant variability.
+* Histogram is unimodel and entirely left skewed
+* Lots of deviations on QQ-plot
+
+#### Question 2
+
+Raise life expectancy to the 4.6 power (i.e., LifeExp^4.6). Raise total expenditures to the 0.06 power (nearly a log transform, TotExp^.06). Plot LifeExp^4.6 as a function of TotExp^.06, and r re-run the simple regression model using the transformed variables. Provide and interpret the F statistics, R^2, standard error, and p-values. Which model is "better?"
+
+**Solution** <br>
+
+```{r}
+library(dplyr)
+who <- who %>%
+  dplyr::mutate(TotExp_new = TotExp^.06,
+         LifeExp_new = LifeExp^4.6)
+```
+
+```{r}
+ggplot(who, aes(TotExp_new, LifeExp_new)) +
+  geom_point(col = "blue") +
+  ylab("Avg Life Expectancy (years) to the power 4.6") +
+  xlab("Avg Personal and Government Expenditures (US dollars) to the power 0.06") +
+  theme( axis.line = element_line(colour = "darkblue", 
+                      size = 1, linetype = "solid")) +
+  scale_x_continuous(labels = dollar) +
+  scale_y_continuous(labels = comma)
+```
+
+#### Create another model using transformed variable
+
+```{r}
+lm_transform <- lm(LifeExp_new ~ TotExp_new,data = who)
+summary(lm_transform)
+```
+
+#### Residual analysis for new model
+
+```{r}
+residual_new <- resid(lm_transform)
+plot(who$TotExp_new, residual_new, xlab="Total Expenditures (Personal and Government)",
+     ylab="Residuals",
+     main="Residual Plot" ) 
+abline(h = 0, col = "blue", lwd=2, lty=2)
+```
+
+```{r}
+hist(residual_new, col = "sky blue")
+```
+
+```{r}
+qqnorm(residual_new)
+qqline(residual_new)
+```
+
+New transformed model, shows:
+
+* Residuals are distributed normally and unimodal
+* P-value is < 0.05, which is statistically significant
+* Standard error is 90490000
+* $R^2$ is 0.729, means model only accounts for 25.8% of the variation in the data
+* QQ plot shows most observations are fall on the line with minimal deviation.
+
+Out of 2 models, transformed model is better than the first model.
+
+
+#### Question 3
+
+Using the results from 3, forecast life expectancy when TotExp^.06 =1.5. Then forecast life expectancy when TotExp^.06=2.5.
+
+**Solution** <br>
+
+Using transformed model linear regression equation:
+$$LifeExp ^ {4.6} = −736527910 + 620060216 ∗ TotExp ^ {0.06}$$
+
+```{r}
+forecast_life_expectancy <- function(total_exp)
+  {
+  result <- (-736527910 + 620060216 *(total_exp) ) ^ (1/4.6)
+  return(result)
+}
+```
+
+```{r}
+forecast_life_expectancy(1.5)
+forecast_life_expectancy(2.5)
+```
+
+The prediction at 1.5 is 63 years and 2.5 is 87 years.
+
+
+#### Question 4
+
+Build the following multiple regression model and interpret the F Statistics, R^2, standard error, and p-values. How good is the model?
+$$LifeExp = b0+b1 x PropMd + b2 x TotExp +b3 x PropMD x TotExp$$
+
+**Solution** <br>
+
+```{r}
+lm3 <- lm(LifeExp ~ PropMD + TotExp + PropMD * TotExp, data = who)
+summary(lm3)
+```
+
+From above model3, we found:
+
+*  $R^2$ is 0.3471, means only 34% of the variance in the response variable can be explained by the independent variable.
+* p-value is very small which is statisticaly significant to the model
+* Standard error is 8.76
+
+This model is not as good as the transformed model.
+
+#### Question 5
+
+Forecast LifeExp when PropMD=.03 and TotExp = 14. Does this forecast seem realistic? Why or why not?
+
+**Solution** <br>
+
+coefficients of model 3 <br>
+
+```{r}
+summary(lm3)['coefficients']
+```
+
+```{r}
+forecast_life_expectancy_2 <- function(PropMD, total_exp)
+  {
+  result <- 62.77270 + 1497.494 * PropMD + 0.00007233 * total_exp + 0.006025686 * PropMD * total_exp
+  return(result)
+}
+```
+
+```{r}
+forecast_life_expectancy_2(0.03, 14)
+```
+
+The predicted value appears too high. This does not seem realistic. 
