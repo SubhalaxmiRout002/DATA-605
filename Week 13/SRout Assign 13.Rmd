@@ -1,0 +1,199 @@
+---
+title: "SRout Assignment 13"
+output:
+  
+  pdf_document: default
+  prettydoc::html_pretty: 
+  html_document:
+    theme: cayman
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+<span style="color:green"> **
+1. Use integration by substitution to solve the integral below.
+$$ \int{4e^{-7x}dx}$$ ** </span>
+
+**Solution**
+
+Note: $\int{e^u du} = e^u$ 
+$$ \int{4e^{-7x}dx}$$
+Lets v = -7x
+dv = dx
+substitute this below:
+$$ \int{4e^{-7x}dx} = 4\int{e^{v}dv} = {4}e^{v} + C = -\frac{4}{7}e^{-7x} + C $$
+<span style="color:green">
+**2. Biologists are treating a pond contaminated with bacteria. The level of contamination is changing at a rate of
+$\frac{dN}{dt}= -\frac{3150}{t^4} - 220$ bacteria per cubic centimeter per day, where t is the number of days since treatment began. Find a
+function N( t ) to estimate the level of contamination if the level after 1 day was 6530 bacteria per cubic centimeter.** </span>
+
+**Solution**
+
+Given, 
+
+t = 1
+
+N(1) = 6530
+
+$$\frac{dN}{dt}= -\frac{3150}{t^4} - 220 = N(t) = -\int\frac{3150}{t^4} dt - 200 \int dt+ C$$
+
+$$N(t) = -3150*t^{-4}- 200 \int dt+ C = -\frac{3150} {-3} t ^ {-3} - 200 (t) + C $$
+Substitue value of t and N(t) :
+
+$$N(1) = \frac{1050}{(1)^3} -220(1) + C$$
+$$6530 =  1050 - 220 + C $$
+
+$$C = 6530 - 1050  + 220$$
+$$C = 5700 $$
+
+Substitute C value:
+
+$$N(t) = 1050 t^{-3} - 200 t  + 5700$$
+
+<span style="color:green"> 
+**3. Find the total area of the red rectangles in the figure below, where the equation of the line is f ( x ) = 2x - 9.**
+</span>
+
+![Figure 1](/Users/subhalaxmirout/DATA 605/trangle.png)
+
+**Solution**
+
+Above plot shows limit (lower = 4.5, upper = 8.5)
+
+```{r}
+area_fun <- function(x) 
+  {
+  return(2 * x - 9)
+}
+
+value <- integrate(area_fun, lower = 4.5, upper = 8.5)$value
+
+print(value)
+
+```
+
+<span style="color:green">
+**4. Find the area of the region bounded by the graphs of the given equations.
+$$y = x ^ 2 - 2x -2, y = x + 2$$
+Enter your answer below.** 
+
+</span>
+
+**Solution**
+
+#### value of x
+
+$$x ^ 2 - 2x -2 = x + 2$$
+
+$$x ^ 2 - 3x -4 = 0$$
+
+$$x ^ 2 - 4x + x -4 = 0$$
+
+$$x(x - 4) + 1(x - 4) = 0$$
+$$(x - 4) * (x + 1) = 0$$
+x = (-1, 4)
+
+Create 2 functions for 2 equations.
+
+```{r}
+
+graph_1 <- function(x){
+  return(x^2 - 2*x -2)
+}
+
+graph_2 <- function(x){
+  return(x +2)
+}
+```
+
+#### Plot graphs.
+
+```{r}
+plot(graph_1, -5, 5, col = 'purple', ylab = "Y")
+plot(graph_2, -5, 5, col = '#05bbaa', add = TRUE)
+```
+
+#### Area of intersection
+
+```{r}
+func_intersect <- function(x)
+  {
+    return((x+2) - (x^2 - 2*x -2))
+}
+
+area <- integrate(func_intersect, lower = -1, upper = 4)$value
+print(area)
+```
+
+<span style="color:green">
+**5. A beauty supply store expects to sell 110 flat irons during the next year. It costs $3.75 to store one flat iron for one year.
+There is a fixed cost of $8.25 for each order. Find the lot size and the number of orders per year that will minimize
+inventory costs.**
+</span>
+
+**Solution**
+
+Suppose half of inventory keeps stock, let x = size of iron
+
+storage cost = 3.75 * x/2
+
+order cost = 8.25 * 110/x
+
+Total Cost = 1.875x + 907.5/x
+
+First order derivate 1.875 - 907.5/$x^2$ = 0
+
+$$1.875 * x ^ 2 - 907.5 = 0$$
+$$1.875 * x ^ 2 =  907.5$$
+$$x ^ 2 =  \frac {907.5}{1.875}$$
+$$x = \sqrt \frac {907.5}{1.875}$$
+
+```{r}
+x <- sqrt(907.5/1.875)
+print(x)
+times <- 110/x
+print(times)
+```
+
+Each year iron can order 5 times size of 22.
+
+<span style="color:green">
+**6. Use integration by parts to solve the integral below.
+$$\int ln( 9x ) · x^6 dx$$**
+</span>
+
+**Solution**
+
+Integration by parts formula:
+
+![](/Users/subhalaxmirout/DATA 605/byparts.png)
+
+u = ln(9x)
+
+du = $\frac {1}{x} dx$
+
+v = x^6
+
+dv = $\frac{1}{7}x^7$
+
+$$\int (uv) dx = ln(9x) * \frac{1}{7}x^7  - \int \frac{1}{x} \frac{1}{7}x^7 dx $$
+$$\int (uv) dx = ln(9x) * \frac{1}{7}x^7  - \frac {1}{7} \int x^6 dx $$
+$$\int (uv) dx = ln(9x) * \frac{1}{7}x^7  - \frac {1}{49} x^7 + C $$
+
+<span style="color:green">
+**7. Determine whether f ( x ) is a probability density function on the interval [1, $e^6$] . If not, determine the value of the
+definite integral.**
+**$$f(x) = \frac {1}{6x}$$**
+</span>
+
+**Solution**
+
+$$f(x) = \frac {1}{6x}$$
+
+$$\int_1 ^{e^6} \frac {1}{6x} dx = \frac{1}{6}*lnx|_1^{e^6} = \frac{1}{6}ln(e^6) - \frac{1}{6}ln(1) = \frac{1}{6}[6 - 0] = 1$$
